@@ -1,0 +1,21 @@
+{
+  "name": "laxar-elm-adapter",
+  "version": "0.0.1-pre",
+  "description": "Write LaxarJS widgets and controls with Elm",
+  "main": "laxar-elm-adapter.js",
+  "peerDependencies": {
+    "laxar": "^2.0.0-alpha.9",
+    "elm": "^0.18.0"
+  },
+  "keywords": [
+    "LaxarJS",
+    "Elm",
+    "Widget",
+    "Control"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LaxarJS/laxar-elm-adapter/issues"
+  },
+  "homepage": "https://github.com/LaxarJS/laxar-elm-adapter#readme"
+}
