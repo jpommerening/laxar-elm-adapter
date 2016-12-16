@@ -33,18 +33,16 @@ export function bootstrap( {}, adapterServices ) {
       return provideElm( provider )
          .then( Elm => {
             const Main = Elm.Main || Elm[ toCamelCase( widgetName ) ];
-            let app;
+            let program;
 
             return {
                domAttachTo( areaElement, templateHtml ) {
                   if( templateHtml ) {
                      throw new Error( 'Template HTML not supported for Elm components' );
                   }
-                  onBeforeControllerCreation( services );
-                  app = Main.embed( anchorElement );
+                  program = Main.embed( anchorElement );
+                  provideWidgetServices( program, services, onBeforeControllerCreation );
                   areaElement.appendChild( anchorElement );
-
-                  // TODO: bind ports to services?
                },
                domDetach() {
                   const parent = anchorElement.parentNode;
@@ -65,6 +63,19 @@ export function bootstrap( {}, adapterServices ) {
       return provider.module();
    }
 
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function provideWidgetServices( program, services, onBeforeControllerCreation ) {
+      const serviceNames = Object.keys( program.ports ).filter( name => name in services );
+      const widgetServices = serviceNames.reduce( ( widgetServices, name ) => {
+         widgetServices[ name ] = services[ name ];
+         return widgetServices;
+      }, {} );
+      onBeforeControllerCreation( widgetServices );
+      serviceNames.forEach( name => {
+         program.ports[ name ].send( widgetServices[ name ] );
+      } );
+   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
